@@ -1,0 +1,3 @@
+---
+- name: Start Slave nodes
+  shell: /vagrant/launch-amb-slave.sh

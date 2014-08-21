@@ -1,0 +1,3 @@
+---
+- name: Fix hostnames in vagrant
+  shell: cat /vagrant/hosts > /etc/hosts

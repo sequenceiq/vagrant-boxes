@@ -10,19 +10,51 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
+  #config.vm.box = "thagler/centos-64"
   config.vm.box = "ubuntu/trusty64"
   config.vm.box_check_update = false
-  config.vm.network "private_network", ip: "192.168.39.11"
 
   config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.customize ["modifyvm", :id, "--memory", "3072"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
   end
 
-
-  config.vm.provision :ansible do |ansible|
-        ansible.playbook = "../ansible/single.yml"
+  config.vm.define "amb0" do |amb0|
+    amb0.vm.hostname = "amb0"
+    amb0.vm.network "private_network", ip: "192.168.38.10"
+  #  amb0.vm.provision :shell, path: "launch-amb-master.sh"
   end
+
+  config.vm.define "amb1" do |amb1|
+    amb1.vm.hostname = "amb1"
+    amb1.vm.network "private_network", ip: "192.168.38.11"
+  #  amb1.vm.provision :shell, path: "launch-amb-slave.sh"
+  end
+
+  config.vm.define "amb2" do |amb2|
+    amb2.vm.hostname = "amb2"
+    amb2.vm.network "private_network", ip: "192.168.38.12"
+  #  amb2.vm.provision :shell, path: "launch-amb-slave.sh"
+  end
+
+  config.vm.define "mon" do |mon|
+    mon.vm.hostname = "mon"
+    mon.vm.network "private_network", ip: "192.168.38.13"
+
+    mon.vm.provision :ansible do |ansible|
+      ansible.groups = {
+        "master_nodes" => ["amb0"],
+        "slave_nodes" => ["amb1", "amb2"],
+        "monitoring_nodes" => ["mon"]
+      }
+      ansible.playbook = "../ansible/cluster.yml"
+      ansible.verbose = "v"
+      # Disable default limit (required with Vagrant 1.5+)
+      ansible.limit = 'all'
+    end
+
+  end
+
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs

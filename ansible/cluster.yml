@@ -1,0 +1,24 @@
+- name: Provision common parts
+  hosts: all
+  sudo: yes
+  roles:
+    - hostsfix
+    - common
+
+- name: Launch ambari master
+  hosts: master_nodes
+  sudo: yes
+  roles:
+    - ambmaster
+
+- name: Launch slaves
+  hosts: slave_nodes
+  sudo: yes
+  roles:
+    - ambslave
+
+- name: Install cluster
+  hosts: master_nodes
+  sudo: yes
+  roles:
+    - hdpcluster

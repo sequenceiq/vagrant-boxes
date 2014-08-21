@@ -1,0 +1,3 @@
+---
+- name: Start Master nodes
+  shell: /vagrant/launch-amb-master.sh

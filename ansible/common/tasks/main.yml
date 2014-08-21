@@ -1,0 +1,9 @@
+---
+- name: Install Docker
+  shell: curl -sL https://get.docker.io/ | sh
+
+- name: Install bridge-utils
+  apt: name=bridge-utils state=latest
+
+- name: Install JDK
+  apt: name=openjdk-7-jdk state=latest

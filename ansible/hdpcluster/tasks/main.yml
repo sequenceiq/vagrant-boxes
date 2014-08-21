@@ -1,0 +1,8 @@
+---
+- name: Start Master nodes
+  shell: /vagrant/install-cluster.sh
+  register: hdpinstall
+
+- debug: msg="{{ hdpinstall.stdout }}"
+
+- debug: msg="{{ hdpinstall.stderr }}"
