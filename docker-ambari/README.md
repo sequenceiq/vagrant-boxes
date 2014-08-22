@@ -1,4 +1,4 @@
-Launchig hadoop docker container with Vagrant
+Launchig Ambari Docker container(s) with Vagrant
 ==========
 
 ## Starting 
