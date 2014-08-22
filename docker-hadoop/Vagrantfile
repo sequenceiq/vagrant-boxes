@@ -10,22 +10,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.box_check_update = false
-  config.vm.network "private_network", ip: "192.168.39.11"
-
-  config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
-    vb.customize ["modifyvm", :id, "--cpus", "2"]
-  end
-
-
-  config.vm.provision :ansible do |ansible|
-        ansible.playbook = "../ansible/single.yml"
-  end
-
-  config.vm.provision :shell do |s|
-       s.inline =  "gpasswd -a vagrant docker && service docker restart"
+  config.vm.define "hadoop" do |h|
+    h.vm.provider "docker" do |d|
+      d.cmd = ["/etc/bootstrap.sh", "-d"]
+      d.image = "sequenceiq/hadoop-docker"
+      d.create_args = ["-i", "-t"]
+      d.vagrant_vagrantfile = "../ubuntu-single/Vagrantfile"
+    end
   end
 
   # Disable automatic box update checking. If you disable this, then

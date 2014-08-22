@@ -1,4 +1,4 @@
-Centos 6.4 cluster with 3 nodes
+Ubuntu cluster with 4 nodes. 3 nodes for hadoop and one node for monitoring
 ==========
 
 The cluster contains also a docker installation.
