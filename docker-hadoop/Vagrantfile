@@ -14,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     h.vm.provider "docker" do |d|
       d.cmd = ["/etc/bootstrap.sh", "-d"]
       d.image = "sequenceiq/hadoop-docker"
-      d.create_args = ["-i", "-t"]
+      d.ports = ["8088:8088"]
       d.vagrant_vagrantfile = "../ubuntu-single/Vagrantfile"
     end
   end
