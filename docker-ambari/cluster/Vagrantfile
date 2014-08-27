@@ -10,39 +10,47 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.define "amb0" do |a0|
-    a0.vm.provider "docker" do |d|
-      d.cmd = ["--tag", "ambari-server=true"]
-      d.image = "sequenceiq/ambari:pam-fix"
-      d.env =  { SERF_JOIN_IP: "192.168.38.11" }
-      d.create_args = ["--net", "host", "-d", "--entrypoint", "/usr/local/serf/bin/start-serf-agent.sh"]
-      d.vagrant_machine = "amb1"
-      d.vagrant_vagrantfile = "cluster/Vagrantfile"
-    end
-  end
-  
-  config.vm.define "amb1" do |a1|
-    a1.vm.provider "docker" do |d|
-      d.image = "sequenceiq/ambari:pam-fix"
-      d.env =  { SERF_JOIN_IP: "192.168.38.10" }
-      d.create_args = ["--net", "host", "-d", "--entrypoint", "/usr/local/serf/bin/start-serf-agent.sh"]
-      d.vagrant_machine = "amb1"
-      d.vagrant_vagrantfile = "cluster/Vagrantfile"
-    end
-  end
-  
-  
-  config.vm.define "amb2" do |a2|
-    a2.vm.provider "docker" do |d|
-      d.image = "sequenceiq/ambari:pam-fix"
-      d.env =  { SERF_JOIN_IP: "192.168.38.10" }
-      d.create_args = ["--net", "host", "-d", "--entrypoint", "/usr/local/serf/bin/start-serf-agent.sh"]
-      d.vagrant_machine = "amb2"
-      d.vagrant_vagrantfile = "cluster/Vagrantfile"
-    end
-  end
-  
+  #config.vm.box = "thagler/centos-64"
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.box_check_update = false
 
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "3072"]
+    vb.customize ["modifyvm", :id, "--cpus", "2"]
+  end
+
+  config.vm.define "amb0" do |amb0|
+    amb0.vm.hostname = "amb0"
+    amb0.vm.network "private_network", ip: "192.168.38.10"
+    amb0.vm.provision :ansible do |ansible|
+  		ansible.playbook = "../../ansible/single.yml"
+  	end
+  	amb0.vm.provision :shell do |s|
+       s.inline =  "gpasswd -a vagrant docker && service docker restart"
+  	end
+  end
+
+  config.vm.define "amb1" do |amb1|
+    amb1.vm.hostname = "amb1"
+    amb1.vm.network "private_network", ip: "192.168.38.11"
+  	amb1.vm.provision :ansible do |ansible|
+  		ansible.playbook = "../../ansible/single.yml"
+  	end
+  	amb1.vm.provision :shell do |s|
+       s.inline =  "gpasswd -a vagrant docker && service docker restart"
+  	end
+  end
+
+  config.vm.define "amb2" do |amb2|
+    amb2.vm.hostname = "amb2"
+    amb2.vm.network "private_network", ip: "192.168.38.12"
+  	amb2.vm.provision :ansible do |ansible|
+  		ansible.playbook = "../../ansible/single.yml"
+  	end
+  	amb2.vm.provision :shell do |s|
+       s.inline =  "gpasswd -a vagrant docker && service docker restart"
+  	end
+  end
 
 
   # Disable automatic box update checking. If you disable this, then
