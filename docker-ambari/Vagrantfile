@@ -10,19 +10,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.define "amb0" do |a0|
-    a0.vm.provider "docker" do |d|
+  config.vm.define "damb0" do |da0|
+    da0.vm.provider "docker" do |d|
       d.cmd = ["--tag", "ambari-server=true"]
       d.image = "sequenceiq/ambari:pam-fix"
       d.env =  { SERF_JOIN_IP: "192.168.38.11" }
       d.create_args = ["--net", "host", "-d", "--entrypoint", "/usr/local/serf/bin/start-serf-agent.sh"]
-      d.vagrant_machine = "amb1"
+      d.vagrant_machine = "amb0"
       d.vagrant_vagrantfile = "cluster/Vagrantfile"
     end
   end
   
-  config.vm.define "amb1" do |a1|
-    a1.vm.provider "docker" do |d|
+  config.vm.define "damb1" do |da1|
+    da1.vm.provider "docker" do |d|
       d.image = "sequenceiq/ambari:pam-fix"
       d.env =  { SERF_JOIN_IP: "192.168.38.10" }
       d.create_args = ["--net", "host", "-d", "--entrypoint", "/usr/local/serf/bin/start-serf-agent.sh"]
@@ -32,8 +32,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
   
   
-  config.vm.define "amb2" do |a2|
-    a2.vm.provider "docker" do |d|
+  config.vm.define "damb2" do |da2|
+    da2.vm.provider "docker" do |d|
       d.image = "sequenceiq/ambari:pam-fix"
       d.env =  { SERF_JOIN_IP: "192.168.38.10" }
       d.create_args = ["--net", "host", "-d", "--entrypoint", "/usr/local/serf/bin/start-serf-agent.sh"]
