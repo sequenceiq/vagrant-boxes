@@ -1,0 +1,6 @@
+- name: Provision common parts
+  hosts: all
+  sudo: yes
+  roles:
+    - hostsfix
+    - common

@@ -1,3 +1,0 @@
----
-- name: Host fix
-  shell: cat /vagrant/hosts > /etc/hosts

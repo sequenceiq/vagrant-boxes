@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     amb0.vm.hostname = "amb0"
     amb0.vm.network "private_network", ip: "192.168.38.10"
     amb0.vm.provision :ansible do |ansible|
-  		ansible.playbook = "../../ansible/single.yml"
+  		ansible.playbook = "../../ansible/single-nethost.yml"
   	end
   	amb0.vm.provision :shell do |s|
        s.inline =  "gpasswd -a vagrant docker && service docker restart"
@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     amb1.vm.hostname = "amb1"
     amb1.vm.network "private_network", ip: "192.168.38.11"
   	amb1.vm.provision :ansible do |ansible|
-  		ansible.playbook = "../../ansible/single.yml"
+  		ansible.playbook = "../../ansible/single-nethost.yml"
   	end
   	amb1.vm.provision :shell do |s|
        s.inline =  "gpasswd -a vagrant docker && service docker restart"
@@ -45,7 +45,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     amb2.vm.hostname = "amb2"
     amb2.vm.network "private_network", ip: "192.168.38.12"
   	amb2.vm.provision :ansible do |ansible|
-  		ansible.playbook = "../../ansible/single.yml"
+  		ansible.playbook = "../../ansible/single-nethost.yml"
   	end
   	amb2.vm.provision :shell do |s|
        s.inline =  "gpasswd -a vagrant docker && service docker restart"
