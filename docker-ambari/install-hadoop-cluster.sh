@@ -7,7 +7,7 @@ curl -Ls https://raw.githubusercontent.com/sequenceiq/ambari-shell/master/latest
 : ${AMBARI_HOST:=192.168.38.10}
 : ${BLUEPRINT:=multi-node-hdfs-yarn}
 
-
+#uses Ambari shell to provision a Hadoop cluster based on the blueprint
 java -jar ambari-shell.jar --ambari.host=$AMBARI_HOST << EOF
 blueprint defaults
 cluster build --blueprint $BLUEPRINT
