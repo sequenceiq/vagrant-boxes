@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+#takes the latest snapshot of the Ambari shell
 export JAR_PATH=ambari-shell.jar
 curl -Ls https://raw.githubusercontent.com/sequenceiq/ambari-shell/master/latest-snap.sh | bash
 
