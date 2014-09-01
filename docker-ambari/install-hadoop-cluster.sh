@@ -4,6 +4,7 @@
 export JAR_PATH=ambari-shell.jar
 curl -Ls https://raw.githubusercontent.com/sequenceiq/ambari-shell/master/latest-snap.sh | bash
 
+#supported blueprints: hdp-multinode-default, hdp-singlenode-default, lambda-architecture, multi-node-hdfs-yarn, single-node-hdfs-yarn
 : ${AMBARI_HOST:=192.168.38.10}
 : ${BLUEPRINT:=multi-node-hdfs-yarn}
 
