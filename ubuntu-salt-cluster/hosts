@@ -1,0 +1,6 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+192.168.38.10 salt
+192.168.38.11 salt-minion1
+192.168.38.12 salt-minion2
+192.168.38.13 salt-minion3

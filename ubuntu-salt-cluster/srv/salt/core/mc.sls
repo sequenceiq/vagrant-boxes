@@ -1,0 +1,2 @@
+mc:
+  pkg.installed
