@@ -1,0 +1,17 @@
+external_auth:
+  pam:
+    vagrant:
+      - .*
+      - '@runner'
+      - '@wheel'
+
+halite:
+  level: 'debug'
+  server: 'cherrypy'
+  host: '0.0.0.0'
+  port: '8080'
+  cors: False
+  tls: True
+  certpath: '/etc/pki/tls/certs/localhost.crt'
+  keypath: '/etc/pki/tls/certs/localhost.key'
+  pempath: '/etc/pki/tls/certs/localhost.pem'
