@@ -67,6 +67,7 @@ export UAA_PERISCOPE_SECRET=b6bffc749b
 export UAA_ULUWATU_SECRET=b6bffc749b
 export UAA_SULTANS_SECRET=b6bffc749b
 ENDOFPROFILE
+
 }
 
 
@@ -76,6 +77,8 @@ main() {
     install_docker
     install_cbd
     install_cloudbreak
+
+    echo Environment setup was SUCCESSFUL
 }
 
 main
