@@ -41,9 +41,6 @@ install_docker() {
 install_cbd() {
   echo "Install cbd"
   if [ ! -f "/var/install_cbd" ]; then
-    #workaround about missing shasum
-    ln -s /usr/bin/sha256sum /usr/bin/shasum
-
     curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh
 
     touch /var/install_cbd
@@ -51,23 +48,17 @@ install_cbd() {
 }
 
 
-install_cloudbreak() {
-  mkdir /root/cbd_test
+setup_env() {
+  mkdir -p /root/cbd_test
   cd /root/cbd_test
   cat > Profile << ENDOFPROFILE
-export PRIVATE_IP=$(docker run alpine sh -c 'ip ro | grep default | cut -d" " -f 3')
 export PUBLIC_IP=192.168.44.10
-export CLOUDBREAK_SMTP_SENDER_USERNAME=xxx
-export CLOUDBREAK_SMTP_SENDER_PASSWORD=xxx
-export CLOUDBREAK_SMTP_SENDER_HOST=email-smtp.us-east-1.amazonaws.com
-export CLOUDBREAK_SMTP_SENDER_PORT=25
-export CLOUDBREAK_SMTP_SENDER_FROM=dummy@example.com
-export UAA_CLOUDBREAK_SECRET=b6bffc749b
-export UAA_PERISCOPE_SECRET=b6bffc749b
-export UAA_ULUWATU_SECRET=b6bffc749b
-export UAA_SULTANS_SECRET=b6bffc749b
 ENDOFPROFILE
+}
 
+update_cbd() {
+  cd /root/cbd_test
+  cbd update master
 }
 
 
@@ -76,9 +67,13 @@ main() {
     epel_repo
     install_docker
     install_cbd
-    install_cloudbreak
+    setup_env
+    update_cbd
 
-    echo Environment setup was SUCCESSFUL
+    cp -v /vagrant/cb-start.sh /root/cbd_test/
+    chmod +x /root/cbd_test/cb-start.sh
+
+    echo "Environment setup was SUCCESSFUL"
 }
 
 main
