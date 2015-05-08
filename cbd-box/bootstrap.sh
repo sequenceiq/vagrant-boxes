@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yum install -y wget tar bzip2 unzip
+yum install -y wget tar bzip2 unzip ntp
 
 
 permissive_iptables() {
