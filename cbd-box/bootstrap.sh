@@ -58,7 +58,7 @@ ENDOFPROFILE
 
 update_cbd() {
   cd /root/cbd_test
-  cbd update master
+  cbd update
 }
 
 

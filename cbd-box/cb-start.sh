@@ -3,11 +3,8 @@
 function cbd_start() {
   cd /root/cbd_test
   cbd kill
-  rm -v -f *.yml
-  cbd generate
+  cbd regenerate
   cbd pull
-  cbd startdb
-  cbd migrate
   cbd start
 }
 
