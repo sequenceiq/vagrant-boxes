@@ -11,8 +11,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   #config.vm.box = "thagler/centos-64"
-  config.vm.box = "chef/centos-6.6"
-  config.vm.box_check_update = false
+  config.vm.box = "boxcutter/centos71"
+
+  if Vagrant.has_plugin?("vagrant-cachier")
+      config.cache.scope = :box
+  end
 
   config.vm.provision :shell, path: "bootstrap.sh"
 

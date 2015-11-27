@@ -1,79 +1,46 @@
 #!/bin/bash
 
-yum install -y wget tar bzip2 unzip ntp
+generic_tools() {
+  yum -y install wget curl git unzip
+}
 
 
 permissive_iptables() {
-  echo "Permissive iptabpes config"
-  if [ ! -f "/var/permissive_iptables" ]; then
-    iptables --flush INPUT
-    iptables --flush FORWARD
-    service iptables save
+  # need to install iptables-services, othervise the 'iptables save' command will not be available
+  yum -y install iptables-services net-tools
 
-    touch /var/permissive_iptables
-  fi
-
+  iptables --flush INPUT
+  iptables --flush FORWARD
+  service iptables save
 }
 
-epel_repo() {
-  echo "Execute repo config"
-  if [ ! -f "/var/epel_repo" ]; then
-    wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-    rpm -Uvh epel-release-6*.rpm
-
-    touch /var/epel_repo
-  fi
+disable_selinux() {
+  setenforce 0
+  sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 }
 
 install_docker() {
-  echo "Install docker"
-  if [ ! -f "/var/docker_setup" ]; then
-    yum install -y device-mapper
-    yum install -y docker-io
-    service docker start
-    chkconfig docker on
-
-    touch /var/docker_setup
-  fi
+  cat >/etc/yum.repos.d/docker.repo <<-EOF
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/$releasever/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF
+  yum install -y docker-engine
+  systemctl start docker
+  systemctl enable docker
+  usermod -aG docker vagrant
 }
 
-
-install_cbd() {
-  echo "Install cbd"
-  if [ ! -f "/var/install_cbd" ]; then
-    curl https://raw.githubusercontent.com/sequenceiq/cloudbreak-deployer/master/install | sh
-
-    touch /var/install_cbd
-  fi
-}
-
-
-setup_env() {
-  mkdir -p /root/cbd_test
-  cd /root/cbd_test
-  cat > Profile << ENDOFPROFILE
-export PUBLIC_IP=192.168.44.10
-ENDOFPROFILE
-}
-
-update_cbd() {
-  cd /root/cbd_test
-  cbd update
-}
 
 
 main() {
-    permissive_iptables
-    epel_repo
-    install_docker
-    install_cbd
-    setup_env
-    update_cbd
-
-    cp -v /vagrant/cb-start.sh /root/cbd_test/
-    chmod +x /root/cbd_test/cb-start.sh
-
-    echo "Environment setup was SUCCESSFUL"
+  generic_tools
+  permissive_iptables
+  disable_selinux
+  install_docker
 }
 
-main
+[[ "$0" == "$BASH_SOURCE" ]] && main "$@"
